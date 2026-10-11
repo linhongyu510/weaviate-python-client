@@ -41,22 +41,22 @@ class Hybrid:
         self.max_vector_distance = content.get("maxVectorDistance")
 
     def __str__(self) -> str:
-        ret = ""
+        args = []
         if self.query is not None:
-            ret += f"query: {_sanitize_str(self.query)}"
+            args.append(f"query: {_sanitize_str(self.query)}")
         if self.vector is not None:
-            ret += f", vector: {self.vector}"
+            args.append(f"vector: {self.vector}")
         if self.alpha is not None:
-            ret += f", alpha: {self.alpha}"
+            args.append(f"alpha: {self.alpha}")
         if self.properties is not None and len(self.properties) > 0:
-            props = '","'.join(self.properties)
-            ret += f', properties: ["{props}"]'
+            props = '",".join(self.properties)'
+            args.append(f'properties: ["{props}"]')
         if self.target_vectors is not None:
-            target_vectors = '","'.join(self.target_vectors)
-            ret += f', targetVectors: ["{target_vectors}"]'
+            target_vectors = '",".join(self.target_vectors)'
+            args.append(f'targetVectors: ["{target_vectors}"]')
         if self.max_vector_distance is not None:
-            ret += f", maxVectorDistance:{self.max_vector_distance}"
-        return "hybrid:{" + ret + "}"
+            args.append(f"maxVectorDistance:{self.max_vector_distance}")
+        return "hybrid:{" + ", ".join(args) + "}"
 
 
 class AggregateBuilder(GraphQL):
@@ -114,7 +114,7 @@ class AggregateBuilder(GraphQL):
         """Set limit to limit the number of returned results from the aggregation query.
 
         Args:
-            limit: The limit.
+            limit: The limit. The limit of the number of results to be returned.
 
         Returns:
             Updated AggregateBuilder.
@@ -182,7 +182,7 @@ class AggregateBuilder(GraphQL):
 
         This filter can be used with text modules (text2vec).
         E.g.: text2vec-contextionary, text2vec-transformers.
-        NOTE: The 'autocorrect' field is enabled only with the `text-spellcheck` Weaviate module.
+        NOTE: The 'autocorrect' field is enabled only with the 'text-spellcheck' Weaviate module.
 
         Args:
             content: The content of the `nearText` filter to set. See examples below.
